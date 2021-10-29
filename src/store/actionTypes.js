@@ -1,0 +1,7 @@
+export const ADD_TODO = 'ADD_TODO';
+export const SET_BUTTON_FILTER = 'SET_BUTTON_FILTER';
+export const REMOVE_TODO = 'REMOVE_TODO';
+export const SELECT_ALL_TASKS = 'SELECT_ALL_TASKS';
+export const DELETE_COMPLETED = 'DELETE_COMPLETED';
+export const TOGGLE_TASK = 'TOGGLE_TASK';
+export const EDIT_TASK = 'EDIT_TASK';
