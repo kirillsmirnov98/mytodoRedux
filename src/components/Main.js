@@ -1,19 +1,35 @@
 import './Main.style.css';
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import TodoForm from './TodoForm';
 import Todo from './Todo';
 import TodoFilter from './TodoFilter';
+import { getLocalStor, getLocalStorFilter } from '../store/actions';
 
 const Main = () => {
+  const dispatch = useDispatch()
   let reduxTodos = useSelector(state => state.reducer.todos);
   let reduxFilter = useSelector(state => state.reducer.filter);
+  const todos = JSON.parse(localStorage.getItem('todos'));
+  const filter = JSON.parse(localStorage.getItem('filter'));
+  // const [filter, setFilter]
+  useEffect(() => {
+    if(todos) {
+      const localS = JSON.parse(localStorage.getItem('todos'));
+      dispatch(getLocalStor(localS));
+    }
+    if(filter) {
+      const localS = JSON.parse(localStorage.getItem('filter'));
+      dispatch(getLocalStorFilter(localS));
+    }   
+  }, []);
+
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(reduxTodos));
   }, [reduxTodos]);
 
   useEffect(() => {
-    localStorage.setItem("filter", reduxFilter);
+    localStorage.setItem("filter", JSON.stringify(reduxFilter));
   }, [reduxFilter]);
 
   let completedItemsCount = 0;
