@@ -6,6 +6,8 @@ import {
   DELETE_COMPLETED,
   TOGGLE_TASK,
   EDIT_TASK,
+  GET_LOCAL_STORE,
+  GET_LOCAL_FILTER,
 } from '../actionTypes';
 
 const getInitialState = () => ({
@@ -58,9 +60,21 @@ export default (state = getInitialState(), action) => {
     case EDIT_TASK:
       return {
         ...state,
-        todos: [...state.todos.map((todo) => 
+        todos: [...state.todos.map((todo) =>
           todo.id === action.payload.id ? { ...todo, task: action.payload.value } : { ...todo }
-          )]
+        )]
+      };
+
+    case GET_LOCAL_STORE:
+      return {
+        ...state,
+        todos: action.payload,
+      };
+
+    case GET_LOCAL_FILTER:
+      return {
+        ...state,
+        filter: action.payload,
       };
 
     default:

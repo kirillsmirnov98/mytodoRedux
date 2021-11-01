@@ -1,67 +1,75 @@
 import './Main.style.css';
-import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import TodoForm from './TodoForm';
 import Todo from './Todo';
 import TodoFilter from './TodoFilter';
+import { getActiveTasks, getAllTasks, getCompletedTasks, getCurrentFilter } from '../store/selectors';
+import { getLocalFilter, getLocalStore } from '../store/actions';
 
 const Main = () => {
-  let reduxTodos = useSelector(state => state.reducer.todos);
-  let reduxFilter = useSelector(state => state.reducer.filter);
-  useEffect(() => {
-    localStorage.setItem("todos", JSON.stringify(reduxTodos));
-  }, [reduxTodos]);
+  const dispatch = useDispatch();
+  let todos = useSelector(getAllTasks);
+  let filter = useSelector(getCurrentFilter);
+  let activeTasks = useSelector(getActiveTasks);
+  let completedTasks = useSelector(getCompletedTasks);
+
+  const localTodos = JSON.parse(localStorage.getItem('todos'));
+  const localFilter = localStorage.getItem('filter');
 
   useEffect(() => {
-    localStorage.setItem("filter", reduxFilter);
-  }, [reduxFilter]);
-
-  let completedItemsCount = 0;
-  let activeItemsCount = 0;
-  reduxTodos.forEach((item) => {
-    if (item.complete) {
-      completedItemsCount++;
-    } else {
-      activeItemsCount++;
+    if (localTodos) {
+      const localStore = JSON.parse(localStorage.getItem('todos'));
+      dispatch(getLocalStore(localStore));
     }
-  });
+    if(localFilter) {
+      const localStoreFilter = localStorage.getItem('filter');
+      dispatch(getLocalFilter(localStoreFilter));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
+
+  useEffect(() => {
+    localStorage.setItem('filter', filter);
+  }, [filter]);
 
   return (
     <div className="main">
       <TodoForm
-        length={reduxTodos.length}
+        length={todos.length}
       >
       </TodoForm>
-      {reduxFilter === "all" && reduxTodos.map((todo) => {
+      {filter === "all" && todos.map((todo) => {
         return (
           <Todo
             todo={todo}
-            key={reduxTodos.id}
+            key={todos.id}
           />
         )
       })}
-      {reduxFilter === "completed" && reduxTodos.map((todo) => {
-        if (todo.complete)
-          return (
-            <Todo
-              todo={todo}
-              key={reduxTodos.id}
-            />
-          )
+      {filter === "completed" && completedTasks.map((todo) => {
+        return (
+          <Todo
+            todo={todo}
+            key={todos.id}
+          />
+        )
       })}
-      {reduxFilter === "active" && reduxTodos.map((todo) => {
-        if (!todo.complete)
-          return (
-            <Todo
-              todo={todo}
-              key={reduxTodos.id}
-            />
-          )
+      {filter === "active" && activeTasks.map((todo) => {
+        return (
+          <Todo
+            todo={todo}
+            key={todos.id}
+          />
+        )
       })}
-      {reduxTodos.length > 0 && (
+      {todos.length > 0 && (
         <TodoFilter
-          length={activeItemsCount}
-          currentValue={completedItemsCount}
+          activeLength={activeTasks.length}
+          completedLength={completedTasks.length}
         />
       )}
     </div>

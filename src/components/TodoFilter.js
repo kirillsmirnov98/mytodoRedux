@@ -17,18 +17,18 @@ const actionButtonsList = [
   }
 ];
 
-const TodoFilter = ({ length, currentValue }) => {
+const TodoFilter = ({ activeLength, completedLength }) => {
   const dispatch = useDispatch();
   const setFilterValue = (value) => {
     dispatch(setButtonFilter(value));
   }
-  const deleteCompletedTasks = (st) => {
-    dispatch(deleteCompleted(st));
+  const deleteCompletedTasks = (state) => {
+    dispatch(deleteCompleted(state));
   }
 
   return (
     <div className="todo-filter">
-      <p>{length} items left</p>
+      <p>{activeLength} items left</p>
       {actionButtonsList.map((item) => (
         <button
           key={item.value}
@@ -37,11 +37,11 @@ const TodoFilter = ({ length, currentValue }) => {
           {item.title}
         </button>
       ))}
-      {currentValue > 0 && (
+      {completedLength > 0 && (
         <button
           onClick={() => deleteCompletedTasks(true)}
         >
-          Clear completed [{currentValue}]
+          Clear completed [{completedLength}]
         </button>
       )}
     </div>

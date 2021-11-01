@@ -5,3 +5,5 @@ export const SELECT_ALL_TASKS = 'SELECT_ALL_TASKS';
 export const DELETE_COMPLETED = 'DELETE_COMPLETED';
 export const TOGGLE_TASK = 'TOGGLE_TASK';
 export const EDIT_TASK = 'EDIT_TASK';
+export const GET_LOCAL_STORE = 'GET_LOCAL_STORE';
+export const GET_LOCAL_FILTER = 'GET_LOCAL_FILTER';
